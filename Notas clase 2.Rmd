@@ -1,0 +1,16 @@
+## Comando 1
+# Nota: dim genes muestras
+# Renglones, columnas 
+# Obtienes todas las muestras de los primeros dos genes.
+
+rse[1:2, ]
+
+## Comando 2
+# Obtenemos las muestras A, D y F de todos los genes. 
+rse[, c("A", "D", "F")]
+
+class → Nombre del objeto 
+dim → Dimesiones de la matriz 
+assay → Son los datos de un experimento, pueden haber varias tablas con distintos datos.
+rownames → el nombre de los genes 
+rowData names → nombre de las fila 
