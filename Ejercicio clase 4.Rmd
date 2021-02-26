@@ -1,0 +1,24 @@
+```{R}
+speaqeasy_data <- file.path(tempdir(), "rse_speaqeasy.RData")
+download.file("https://github.com/LieberInstitute/SPEAQeasy-example/blob/master/rse_speaqeasy.RData?raw=true", speaqeasy_data, mode = "wb")
+library("SummarizedExperiment")
+load(speaqeasy_data, verbose = TRUE) 
+cosito <- data.frame(rse_gene$totalAssignedGene, rse_gene$mitoRate, rse_gene$PrimaryDx)
+control <- cosito[ rse_gene$PrimaryDx == 'Control',]
+bipolar <- cosito[ rse_gene$PrimaryDx == 'Bipolar',]
+summary(control$rse_gene.totalAssignedGene)
+summary(bipolar$rse_gene.totalAssignedGene)
+summary(control$rse_gene.mitoRate)
+summary(bipolar$rse_gene.mitoRate)
+
+genePos <- match('SNAP25',rowRanges(rse_gene)$Symbol)
+cuentas <- as.vector(assay(rse_gene[genePos,], "counts"))
+cositoCuen <- cbind(cosito, cuentas)
+bipolarCuen <- cositoCuen[cositoCuen$rse_gene.PrimaryDx == "Bipolar",]
+controlCuen <- cositoCuen[cositoCuen$rse_gene.PrimaryDx == "Control", ]
+boxplot(x = cbind(controlCuen$cuentas,bipolarCuen$cuentas), names= c('Control', 'Bipolar'))
+
+dfCdmx <- as.data.frame(cbind(as.vector(rse_gene$BrainRegion),as.vector(rse_gene$PrimaryDx)))
+names(dfCdmx) <- c('BrainRegion','PrimaryDx')
+vd <- ExploreModelMatrix::VisualizeDesign( sampleData = dfCdmx, designFormula = ~ BrainRegion + PrimaryDx, textSizeFitted = 4 ) 
+```
